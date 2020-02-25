@@ -11,44 +11,39 @@ namespace ConsoleListTakerApp
         List<string> UIWords = new List<string>();
         List<int> UINumbers = new List<int>();
 
- 
-        private string _inputText;
-        
 
-        string IListTaker.InputText { get => _inputText;  set => _inputText = value;  }
-        void IListTaker.UserInput(string UIText)
+        private string _inputText;
+
+        string IListTaker.InputText { get => _inputText; set => _inputText = value; }
+        void IListTaker.UserInputSorter(string UIText)
         {
             string[] CharCheck = { "-", "\\", "/" };
 
             UIText = Console.ReadLine();
             _inputText = UIText;
 
-            string[] InputSorter = _inputText.Split(new char[] {' ' });
+            string[] InputSorter = _inputText.Split(new char[] { ' ' });
 
             for (int i = 0; i < InputSorter.Count(); i++)
             {
                 int BoolNum = 0;
-
                 bool result = int.TryParse(InputSorter[i], out BoolNum);
 
-                if (result != false) { UINumbers.Add(BoolNum); }
-                else UIWords.Add(InputSorter[i]);
-
-                switch(result  != false)
+                switch (result != false)
                 {
+                    case false:
+                        switch (CharCheck)
+                        {
+                            case string[] _ when InputSorter[i].Contains("-"): UIPhoneNumbers.Add(InputSorter[i]); break;
 
+                            case string[] _ when InputSorter[i].Contains("/"): UIDates.Add(InputSorter[i]); break;
 
-                    case true : UINumbers.Add(BoolNum); return;
+                            default: UIWords.Add(InputSorter[i]); break;
+                        }
+                        break;
 
-
-                }
-
-                switch(CharCheck)
-                {
-                    case string[] a when a.Contains("-"): UIPhoneNumbers.Add(InputSorter[i]); return;
-
-                    case string[] b when b.Contains("/"): UIDates.Add(InputSorter[i]); return;
-                }
+                    case true: UINumbers.Add(BoolNum); break;
+                }                               
             }
         }
 
@@ -73,22 +68,17 @@ namespace ConsoleListTakerApp
             Program program = new Program();
             IListTaker listTaker = new Program();
 
-
             Console.WriteLine("Hello World! \n");
 
-            listTaker.UserInput(program._inputText);
-
+            listTaker.UserInputSorter(program._inputText);
             listTaker.DisplayLists();
-
-            
         }
     }
 
     interface IListTaker
     {
         string InputText { get; set; }
-        void UserInput(string text);
-
+        void UserInputSorter(string text);
         void DisplayLists();
     }
 }
