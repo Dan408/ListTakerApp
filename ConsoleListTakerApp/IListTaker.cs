@@ -9,5 +9,8 @@ namespace ConsoleListTakerApp
         string InputText { get; set; }
         void UserInputSorter(string text);
         void DisplayLists();
+        void DeleteDuplicates();
+        void ExportJson();
+
     }
 }

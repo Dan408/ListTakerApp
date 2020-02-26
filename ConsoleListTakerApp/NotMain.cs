@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Text;
+using System.IO;
 using System.Linq;
 
 namespace ConsoleListTakerApp
@@ -22,40 +23,33 @@ namespace ConsoleListTakerApp
         string IListTaker.InputText { get => _inputText; set => _inputText = value; }
         void IListTaker.UserInputSorter(string UIText)
         {
-
             UIText = Console.ReadLine();
             _inputText = UIText;
             //Read user input and put into a variable
 
-            string[] InputSorter = _inputText.Split(new char[] { ' ' });
-            //Take string, split by empty space and put contents into new collection
+            string[] InputSorter = _inputText.Split(new char[] { ' ' }); //Take string, split by empty space and put contents into new collection
 
-            string[] CharCheck = { "-", "\\", "/" };
-            // Variable to be used to check if specified char is in string
 
-            for (int i = 0; i < InputSorter.Count(); i++)
+            string[] CharCheck = { "-", "\\", "/" };  // Variable to be used to check if specified char is in string
+
+            for (int i = 0; i < InputSorter.Count(); i++) //For loop to traverse contents in collection and add them to different collections depending on results
             {
                 int BoolNum = 0;
-                bool result = int.TryParse(InputSorter[i], out BoolNum);
+                bool result = int.TryParse(InputSorter[i], out BoolNum); //Check if string is a number, if it is, result is true and value of int is assigned to boolnum
 
                 switch (result != false)
                 {
                     case false:
-                        switch (CharCheck)
+                        switch (CharCheck) //check if string contains specified char
                         {
                             case string[] _ when InputSorter[i].Contains("-"): UIPhoneNumbers.Add(InputSorter[i]); break;
-
                             case string[] _ when InputSorter[i].Contains("/"): UIDates.Add(InputSorter[i]); break;
-
                             default: UIWords.Add(InputSorter[i]); break;
                         }
                         break;
-
                     case true: UINumbers.Add(BoolNum); break;
                 }
-            }
-
-            //For loop to traverse contents in collection and add them to different collections depending on results
+            } 
         }
 
         void IListTaker.DisplayLists()
@@ -73,6 +67,35 @@ namespace ConsoleListTakerApp
             UIDates.OrderBy(x => DateTime.Parse(x)).ToList().ForEach(x => { Console.WriteLine(x); });
 
             //Display Lists
+        }
+
+        void IListTaker.DeleteDuplicates()
+        {
+            UINumbers = UINumbers.Distinct().ToList();
+            UIWords = UIWords.Distinct().ToList();
+            UIPhoneNumbers = UIPhoneNumbers.Distinct().ToList();
+            UIDates = UIDates.Distinct().ToList();
+        }
+
+        void IListTaker.ExportJson()
+        {
+            Console.WriteLine(@"Please enter Path and file name: *Example C:\Users\Person\File.txt");
+            string path = Console.ReadLine();
+
+            List<string> Serialized = new List<string>();
+            
+            string serializedJsonNumbers = "Numbers: " + JsonConvert.SerializeObject(UINumbers);
+            string serializedJsonWords = "Words: " + JsonConvert.SerializeObject(UIWords);
+            string serializedJsonNPhoneNumbers = "Phone Numbers: " + JsonConvert.SerializeObject(UIPhoneNumbers);
+            string serializedJsonDates = "Dates: " + JsonConvert.SerializeObject(UIDates);
+            
+            Serialized.Add(serializedJsonNumbers);
+            Serialized.Add(serializedJsonWords);
+            Serialized.Add(serializedJsonNPhoneNumbers);
+            Serialized.Add(serializedJsonDates);
+
+            System.IO.File.WriteAllLines(path, Serialized);
+
         }
         #endregion
     }
