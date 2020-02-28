@@ -81,20 +81,16 @@ namespace ConsoleListTakerApp
             Console.WriteLine(@"Please enter Path and file name: *Example C:\Users\Person\File.txt");
             string path = Console.ReadLine();
 
-            List<string> Serialized = new List<string>();
-            
-            string serializedJsonNumbers = "Numbers: " + JsonConvert.SerializeObject(UINumbers);
-            string serializedJsonWords = "Words: " + JsonConvert.SerializeObject(UIWords);
-            string serializedJsonNPhoneNumbers = "Phone Numbers: " + JsonConvert.SerializeObject(UIPhoneNumbers);
-            string serializedJsonDates = "Dates: " + JsonConvert.SerializeObject(UIDates);
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(new
+            {
+                Numbers = UINumbers,
+                Words = UIWords,
+                PhoneNumbers = UIPhoneNumbers,
+                Dates = UIDates
 
+            }, Formatting.Indented);
 
-            Serialized.Add(serializedJsonNumbers);
-            Serialized.Add(serializedJsonWords);
-            Serialized.Add(serializedJsonNPhoneNumbers);
-            Serialized.Add(serializedJsonDates);
-
-            System.IO.File.WriteAllLines(path, Serialized);
+            System.IO.File.WriteAllText(path, json);
 
         }
         #endregion
