@@ -88,7 +88,8 @@ namespace ConsoleListTakerApp
             string serializedJsonWords = "Words: " + JsonConvert.SerializeObject(UIWords);
             string serializedJsonNPhoneNumbers = "Phone Numbers: " + JsonConvert.SerializeObject(UIPhoneNumbers);
             string serializedJsonDates = "Dates: " + JsonConvert.SerializeObject(UIDates);
-            
+
+
             Serialized.Add(serializedJsonNumbers);
             Serialized.Add(serializedJsonWords);
             Serialized.Add(serializedJsonNPhoneNumbers);
