@@ -16,39 +16,57 @@ namespace ConsoleListTakerApp
 
         #region Public Variable
         public string _inputText;
+        public string[] _parseInput;
         #endregion
 
         #region Interface Implementation
         string IListTaker.InputText { get => _inputText; set => _inputText = value; }
-        void IListTaker.UserInputSorter(string UIText)
+        string[] IListTaker.ParseInput { get => _parseInput; set => _parseInput = value; }
+
+        void IListTaker.GetList()
         {
-            UIText = Console.ReadLine();
-            _inputText = UIText;
-            //Read user input and put into a variable
+            Console.WriteLine(" Hello World!\n This List Taker app can take a list separated by a space\n Dates can be entered with a backslash \\, dash - or with a forward slash / *Example: 1/20/2020* \n Phone numbers will need dashes *Example: 123-459-345*\n");
 
-            string[] InputSorter = _inputText.Split(new char[] { ' ' }); //Take string, split by empty space and put contents into new collection
+            _inputText = Console.ReadLine();
+
+        }
+
+        void IListTaker.ParseList()
+        {
+            _parseInput = _inputText.Split(new char[] { ' ' }); //Take string, split by empty space and put contents into new collection
 
 
-            string[] CharCheck = { "-", "\\", "/" };  // Variable to be used to check if specified char is in string
+             // Variable to be used to check if specified char is in string
 
-            for (int i = 0; i < InputSorter.Count(); i++) //For loop to traverse contents in collection and add them to different collections depending on results
+        }
+
+        void IListTaker.AllocateToLists(string UIText)
+        {
+            string[] CharCheck = { "-", "\\", "/" };
+
+            for (int i = 0; i < _parseInput.Count(); i++) //For loop to traverse contents in collection and add them to different collections depending on results
             {
                 int BoolNum = 0;
-                bool result = int.TryParse(InputSorter[i], out BoolNum); //Check if string is a number, if it is, result is true and value of int is assigned to boolnum
+                bool result = int.TryParse(_parseInput[i], out BoolNum); //Check if string is a number, if it is, result is true and value of int is assigned to boolnum
+
+                if (_parseInput[i].Contains("-")) { UIPhoneNumbers.Add(_parseInput[i]);  }
+                if (_parseInput[i].Contains("/")) { UIPhoneNumbers.Add(_parseInput[i]); }
+                else (
 
                 switch (result != false)
                 {
                     case false:
                         switch (CharCheck) //check if string contains specified char
                         {
-                            case string[] _ when InputSorter[i].Contains("-"): UIPhoneNumbers.Add(InputSorter[i]); break;
-                            case string[] _ when InputSorter[i].Contains("/"): UIDates.Add(InputSorter[i]); break;
-                            default: UIWords.Add(InputSorter[i]); break;
+                            case string[] _ when _parseInput[i].Contains("-"): UIPhoneNumbers.Add(_parseInput[i]); break;
+                            case string[] _ when _parseInput[i].Contains("/"): UIDates.Add(_parseInput[i]); break;
+                            default: UIWords.Add(_parseInput[i]); break;
                         }
                         break;
                     case true: UINumbers.Add(BoolNum); break;
                 }
-            } 
+            }
+
         }
 
         void IListTaker.DisplayLists()
@@ -88,7 +106,7 @@ namespace ConsoleListTakerApp
                 PhoneNumbers = UIPhoneNumbers,
                 Dates = UIDates
 
-            }, Formatting.Indented);
+            }, Formatting.Indented); //schema is correct as long as it's done by the serializer in one go instead of the previous 4 times in a row
 
             System.IO.File.WriteAllText(path, json);
 
