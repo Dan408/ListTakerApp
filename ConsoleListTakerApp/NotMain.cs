@@ -25,47 +25,58 @@ namespace ConsoleListTakerApp
 
         void IListTaker.GetList()
         {
-            Console.WriteLine(" Hello World!\n This List Taker app can take a list separated by a space\n Dates can be entered with a backslash \\, dash - or with a forward slash / *Example: 1/20/2020* \n Phone numbers will need dashes *Example: 123-459-345*\n");
-
             _inputText = Console.ReadLine();
-
         }
+
 
         void IListTaker.ParseList()
         {
-            _parseInput = _inputText.Split(new char[] { ' ' }); //Take string, split by empty space and put contents into new collection
-
-
-             // Variable to be used to check if specified char is in string
-
+            _parseInput = _inputText.Split(new char[] { ' ' }); 
         }
 
         void IListTaker.AllocateToLists(string UIText)
         {
             string[] CharCheck = { "-", "\\", "/" };
 
-            for (int i = 0; i < _parseInput.Count(); i++) //For loop to traverse contents in collection and add them to different collections depending on results
+            for (int i = 0; i < _parseInput.Count(); i++) 
             {
                 int BoolNum = 0;
-                bool result = int.TryParse(_parseInput[i], out BoolNum); //Check if string is a number, if it is, result is true and value of int is assigned to boolnum
+                bool result = int.TryParse(_parseInput[i], out BoolNum);
+                string Number;
 
-                if (_parseInput[i].Contains("-")) { UIPhoneNumbers.Add(_parseInput[i]);  }
-                if (_parseInput[i].Contains("/")) { UIPhoneNumbers.Add(_parseInput[i]); }
-                else (
 
-                switch (result != false)
+                //switch (result != false)
+                //{
+                //    case false:
+                //        switch (CharCheck) //check if string contains specified char
+                //        {
+                //            case string[] _ when _parseInput[i].Contains("-"): UIPhoneNumbers.Add(_parseInput[i]); break;
+                //            case string[] _ when _parseInput[i].Contains("/"): UIDates.Add(_parseInput[i]); break;
+                //            default: UIWords.Add(_parseInput[i]); break;
+                //        }
+                //        break;
+                //    case true: UINumbers.Add(BoolNum); break;
+                //}
+
+                int MinDigits = 0;
+
+                foreach (char c in _parseInput[i])
                 {
-                    case false:
-                        switch (CharCheck) //check if string contains specified char
-                        {
-                            case string[] _ when _parseInput[i].Contains("-"): UIPhoneNumbers.Add(_parseInput[i]); break;
-                            case string[] _ when _parseInput[i].Contains("/"): UIDates.Add(_parseInput[i]); break;
-                            default: UIWords.Add(_parseInput[i]); break;
-                        }
-                        break;
-                    case true: UINumbers.Add(BoolNum); break;
+
+                    if(char.IsNumber(c)) 
+                    {
+                            MinDigits++;
+                        if(MinDigits >= 9) { UIPhoneNumbers.Add(_parseInput[i]);}
+                        if(MinDigits <= 8) { UIDates.Add(_parseInput[i]); }
+                        if(result == true) { UINumbers.Add(BoolNum); }
+                        
+                    }
                 }
+
+
             }
+
+
 
         }
 
@@ -109,8 +120,8 @@ namespace ConsoleListTakerApp
             }, Formatting.Indented); //schema is correct as long as it's done by the serializer in one go instead of the previous 4 times in a row
 
             System.IO.File.WriteAllText(path, json);
-
         }
         #endregion
     }
 }
+ 

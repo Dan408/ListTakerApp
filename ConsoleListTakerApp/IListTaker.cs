@@ -16,6 +16,8 @@ namespace ConsoleListTakerApp
 
         void ParseList();
 
+
+
         string[] ParseInput { get; set; }
 
     }

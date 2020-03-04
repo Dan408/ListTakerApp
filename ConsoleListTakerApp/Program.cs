@@ -9,14 +9,17 @@ namespace ConsoleListTakerApp
             NotMain notMain = new NotMain();
             IListTaker listTaker = new NotMain();
 
-
+           
+            
+            listTaker.GetList();
+            listTaker.ParseList();
             listTaker.AllocateToLists(notMain._inputText);
             listTaker.DeleteDuplicates();
             listTaker.DisplayLists();
 
             Console.WriteLine("\nEXPORTING JSON");
 
-            listTaker.ExportJson();
+            //listTaker.ExportJson();
         }
     }
 }
