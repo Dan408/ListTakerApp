@@ -11,7 +11,7 @@ namespace ConsoleListTakerApp
         List<string> UIPhoneNumbers = new List<string>();
         List<string> UIDates = new List<string>();
         List<string> UIWords = new List<string>();
-        List<int> UINumbers = new List<int>();
+        List<long> UINumbers = new List<long>();
         #endregion
 
         #region Public Variable
@@ -31,53 +31,15 @@ namespace ConsoleListTakerApp
 
         void IListTaker.ParseList()
         {
-            _parseInput = _inputText.Split(new char[] { ' ' }); 
+            _parseInput = _inputText.Split(new char[] { ' ' });
         }
 
         void IListTaker.AllocateToLists(string UIText)
         {
+            long t = 0; ;
+
             string[] CharCheck = { "-", "\\", "/" };
-
-            for (int i = 0; i < _parseInput.Count(); i++) 
-            {
-                int BoolNum = 0;
-                bool result = int.TryParse(_parseInput[i], out BoolNum);
-                string Number;
-
-
-                //switch (result != false)
-                //{
-                //    case false:
-                //        switch (CharCheck) //check if string contains specified char
-                //        {
-                //            case string[] _ when _parseInput[i].Contains("-"): UIPhoneNumbers.Add(_parseInput[i]); break;
-                //            case string[] _ when _parseInput[i].Contains("/"): UIDates.Add(_parseInput[i]); break;
-                //            default: UIWords.Add(_parseInput[i]); break;
-                //        }
-                //        break;
-                //    case true: UINumbers.Add(BoolNum); break;
-                //}
-
-                int MinDigits = 0;
-
-                foreach (char c in _parseInput[i])
-                {
-
-                    if(char.IsNumber(c)) 
-                    {
-                            MinDigits++;
-                        if(MinDigits >= 9) { UIPhoneNumbers.Add(_parseInput[i]);}
-                        if(MinDigits <= 8) { UIDates.Add(_parseInput[i]); }
-                        if(result == true) { UINumbers.Add(BoolNum); }
-                        
-                    }
-                }
-
-
-            }
-
-
-
+            _parseInput.ToList().ForEach(x => { if (x.Contains('-')) long.TryParse(x, out t); UINumbers.Add(t); });
         }
 
         void IListTaker.DisplayLists()
@@ -93,7 +55,6 @@ namespace ConsoleListTakerApp
 
             Console.WriteLine("\nDates:");
             UIDates.OrderBy(x => DateTime.Parse(x)).ToList().ForEach(x => { Console.WriteLine(x); });
-
             //Display Lists
         }
 
@@ -116,12 +77,52 @@ namespace ConsoleListTakerApp
                 Words = UIWords,
                 PhoneNumbers = UIPhoneNumbers,
                 Dates = UIDates
-
             }, Formatting.Indented); //schema is correct as long as it's done by the serializer in one go instead of the previous 4 times in a row
 
             System.IO.File.WriteAllText(path, json);
         }
+
+
+        //void Empty()
+        //{
+        //    void IListTaker.AllocateToLists(string UIText)
+        //{
+        //        string[] CharCheck = { "-", "\\", "/" };
+
+        //        for (int i = 0; i < _parseInput.Count(); i++)
+        //        {
+        //            int BoolNum = 0;
+        //            bool result = int.TryParse(_parseInput[i], out BoolNum);
+
+        //            switch (result != false)
+        //            {
+        //                case false:
+        //                    switch (CharCheck) //check if string contains specified char
+        //                    {
+        //                        case string[] _ when _parseInput[i].Contains("-"): UIPhoneNumbers.Add(_parseInput[i]); break;
+        //                        case string[] _ when _parseInput[i].Contains("/"): UIDates.Add(_parseInput[i]); break;
+        //                        default: UIWords.Add(_parseInput[i]); break;
+        //                    }
+        //                    break;
+        //                case true: UINumbers.Add(BoolNum); break;
+        //            }
+
+        //            int MinDigits = 0;
+
+        //            foreach (char c in _parseInput[i])
+        //            {
+
+        //                if (char.IsNumber(c))
+        //                {
+        //                    MinDigits++;
+        //                    if (MinDigits >= 9 & CharCheck.Contains(c)) { UIPhoneNumbers.Add(_parseInput[i]); }
+        //                    if (MinDigits <= 8 & CharCheck.Contains(c)) { UIDates.Add(_parseInput[i]); }
+        //                    if (result == true) { UINumbers.Add(BoolNum); }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
         #endregion
     }
 }
- 
