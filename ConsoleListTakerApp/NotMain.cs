@@ -40,6 +40,7 @@ namespace ConsoleListTakerApp
 
             string[] CharCheck = { "-", "\\", "/" };
             _parseInput.ToList().ForEach(x => { if (x.Contains('-')) long.TryParse(x, out t); UINumbers.Add(t); });
+
         }
 
         void IListTaker.DisplayLists()
