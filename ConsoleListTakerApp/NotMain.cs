@@ -36,10 +36,23 @@ namespace ConsoleListTakerApp
 
         void IListTaker.AllocateToLists(string UIText)
         {
+            string[] CharCheck = { "-", "\\", "/" };
+
             long t = 0; ;
 
-            string[] CharCheck = { "-", "\\", "/" };
-            _parseInput.ToList().ForEach(x => { if (x.Contains('-')) long.TryParse(x, out t); UINumbers.Add(t); });
+            //_parseInput.ToList().ForEach(x => { if (x.Contains('-')) long.TryParse(x, out t); UINumbers.Add(t); });
+
+            //_parseInput.ToList().ForEach(x => x.ToList().ForEach(y => { if (y.ToString() == "/" | y.ToString() == "\\" | y.ToString() == "-") { Console.WriteLine(x); Console.WriteLine(y); } }));
+
+            _parseInput.ToList().ForEach(
+                x => 
+                {   if (CharCheck.Any( _charcheck => x.Contains(_charcheck)) & x.Length  > 9) {UIPhoneNumbers.Add(x);}
+                    else if (CharCheck.Any(_charcheck => x.Contains(_charcheck)) & x.Length <= 9 & !x.StartsWith('-'))  { UIDates.Add(x);}
+                    else if (long.TryParse(x, out long ParsedLong) == true) { UINumbers.Add(ParsedLong); }
+                    else UIWords.Add(x);
+
+                    
+                });
 
         }
 
